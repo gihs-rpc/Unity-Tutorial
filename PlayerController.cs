@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
-
+public class PlayerController : MonoBehaviour
+{
     public int walkSpeed;
     public int runSpeed;
     int speed;
+    public float jumpSpeed;
+
     public Rigidbody rb;
     Vector3 direction;
-
-	// Use this for initialization
-	void Start () {
+    
+    // Start is called before the first frame update
+    void Start()
+    {
         speed = walkSpeed;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         if (Input.GetButton("Run"))
         {
             speed = runSpeed;
@@ -24,13 +28,24 @@ public class PlayerController : MonoBehaviour {
         {
             speed = walkSpeed;
         }
+
         Move();
-	}
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
+    }
 
     void Move()
     {
         direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-        rb.MovePosition(transform.position + (direction * speed * Time.deltaTime));
+        rb.MovePosition(transform.position + transform.TransformDirection(direction * speed * Time.deltaTime));
+    }
+
+    void Jump()
+    {
+        rb.velocity = new Vector3(0f, rb.velocity.y + jumpSpeed, 0f);
     }
 }
