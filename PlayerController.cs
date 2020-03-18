@@ -8,6 +8,10 @@ public class PlayerController : MonoBehaviour
     public int runSpeed;
     int speed;
     public float jumpSpeed;
+    public Transform groundCheck;
+    public float groundDistance;
+    bool isGrounded;
+    public LayerMask groundLayer;
 
     public Rigidbody rb;
     Vector3 direction;
@@ -21,6 +25,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayer);
+
         if (Input.GetButton("Run"))
         {
             speed = runSpeed;
@@ -31,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
         Move();
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             Jump();
         }
